@@ -15,7 +15,7 @@ class block_iednews extends block_base {
     }
 
     public function get_content() {
-        global $DB, $OUTPUT;
+        global $DB, $OUTPUT, $USER;
 
         if ($this->content !== null) {
             return $this->content;
@@ -40,6 +40,25 @@ class block_iednews extends block_base {
         $select = 'published = :published AND (publishfrom = 0 OR publishfrom <= :now1)
                    AND (publishto = 0 OR publishto >= :now2)';
         $params = ['published' => 1, 'now1' => $now, 'now2' => $now];
+
+        if (!is_siteadmin()) {
+            $select .= ' AND (
+                NOT EXISTS (
+                    SELECT 1
+                      FROM {block_iednews_cohort} bnc_all
+                     WHERE bnc_all.newsid = {block_iednews}.id
+                )
+                OR EXISTS (
+                    SELECT 1
+                      FROM {block_iednews_cohort} bnc_member
+                      JOIN {cohort_members} cm ON cm.cohortid = bnc_member.cohortid
+                     WHERE bnc_member.newsid = {block_iednews}.id
+                       AND cm.userid = :currentuserid
+                )
+            )';
+            $params['currentuserid'] = $USER->id;
+        }
+
         $newsitems = $DB->get_records_select(
             'block_iednews',
             $select,

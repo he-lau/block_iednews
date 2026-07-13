@@ -33,6 +33,12 @@ class news_form extends \moodleform {
         $mform->addElement('date_time_selector', 'publishto', get_string('publishto', 'block_iednews'),
             ['optional' => true]);
 
+        $cohorts = $this->_customdata['cohorts'] ?? [];
+        $mform->addElement('select', 'cohortids', get_string('targetcohorts', 'block_iednews'), $cohorts,
+            ['multiple' => 'multiple', 'size' => min(10, max(3, count($cohorts)))]);
+        $mform->setType('cohortids', PARAM_INT);
+        $mform->addHelpButton('cohortids', 'targetcohorts', 'block_iednews');
+
         $this->add_action_buttons(true);
     }
 

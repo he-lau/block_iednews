@@ -26,6 +26,7 @@ $editoroptions = [
     'subdirs' => 0,
     'accepted_types' => ['image'],
 ];
+$cohorts = $DB->get_records_menu('cohort', null, 'name ASC', 'id, name');
 
 if ($id) {
     $news = $DB->get_record('block_iednews', ['id' => $id], '*', MUST_EXIST);
@@ -38,17 +39,24 @@ if ($id) {
         'content',
         $news->id
     );
+    $news->cohortids = $DB->get_fieldset_select(
+        'block_iednews_cohort',
+        'cohortid',
+        'newsid = ?',
+        [$news->id]
+    );
 } else {
     $news = (object) [
         'id' => 0,
         'published' => 1,
         'publishfrom' => time(),
         'publishto' => 0,
+        'cohortids' => [],
         'content_editor' => ['text' => '', 'format' => FORMAT_HTML],
     ];
 }
 
-$form = new news_form($url, ['editoroptions' => $editoroptions]);
+$form = new news_form($url, ['editoroptions' => $editoroptions, 'cohorts' => $cohorts]);
 $form->set_data($news);
 
 if ($form->is_cancelled()) {
@@ -86,6 +94,21 @@ if ($form->is_cancelled()) {
         'content' => $data->content,
         'contentformat' => $data->contentformat,
     ]);
+
+    $DB->delete_records('block_iednews_cohort', ['newsid' => $itemid]);
+    if (!empty($data->cohortids) && is_array($data->cohortids)) {
+        $selectedcohorts = array_unique(array_map('intval', $data->cohortids));
+        foreach ($selectedcohorts as $cohortid) {
+            if ($cohortid <= 0 || !isset($cohorts[$cohortid])) {
+                continue;
+            }
+            $DB->insert_record('block_iednews_cohort', (object) [
+                'newsid' => $itemid,
+                'cohortid' => $cohortid,
+            ]);
+        }
+    }
+
     redirect(new moodle_url('/blocks/iednews/manage.php'), get_string('changessaved'));
 }
 

@@ -23,6 +23,10 @@ class provider implements
             'timecreated' => 'privacy:metadata:block_iednews:timecreated',
             'timemodified' => 'privacy:metadata:block_iednews:timemodified',
         ], 'privacy:metadata:block_iednews');
+        $collection->add_database_table('block_iednews_cohort', [
+            'newsid' => 'privacy:metadata:block_iednews_cohort:newsid',
+            'cohortid' => 'privacy:metadata:block_iednews_cohort:cohortid',
+        ], 'privacy:metadata:block_iednews_cohort');
         return $collection;
     }
 
@@ -82,6 +86,7 @@ class provider implements
         }
 
         get_file_storage()->delete_area_files($context->id, 'block_iednews', 'content');
+        $DB->delete_records('block_iednews_cohort');
         $DB->delete_records('block_iednews');
     }
 
@@ -96,6 +101,7 @@ class provider implements
         $records = $DB->get_records('block_iednews', ['usermodified' => $contextlist->get_user()->id], '', 'id');
         foreach ($records as $record) {
             get_file_storage()->delete_area_files($context->id, 'block_iednews', 'content', $record->id);
+            $DB->delete_records('block_iednews_cohort', ['newsid' => $record->id]);
         }
         $DB->delete_records('block_iednews', ['usermodified' => $contextlist->get_user()->id]);
     }

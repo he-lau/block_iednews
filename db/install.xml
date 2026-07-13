@@ -24,5 +24,20 @@
         <INDEX NAME="published_dates" UNIQUE="false" FIELDS="published,publishfrom,publishto"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="block_iednews_cohort" COMMENT="Cohorts targeted by IED news items">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="newsid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="cohortid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="newsid" TYPE="foreign" FIELDS="newsid" REFTABLE="block_iednews" REFFIELDS="id"/>
+        <KEY NAME="cohortid" TYPE="foreign" FIELDS="cohortid" REFTABLE="cohort" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="newsid_cohortid" UNIQUE="true" FIELDS="newsid,cohortid"/>
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>
