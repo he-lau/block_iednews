@@ -10,6 +10,11 @@ define(['jquery'], function($) {
                 return;
             }
 
+            carousel.find('.block-iednews-indicators [data-slide-to]').on('click', function(event) {
+                event.preventDefault();
+                carousel.carousel(parseInt($(this).data('slide-to'), 10));
+            });
+
             var setPaused = function(paused) {
                 var label = paused ? button.data('resume-label') : button.data('pause-label');
                 button.attr({

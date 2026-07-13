@@ -6,7 +6,7 @@
     {{#showcontrols}}
         <ol class="carousel-indicators block-iednews-indicators">
             {{#items}}
-                <li{{#active}} class="active"{{/active}}>
+                <li data-target="#{{carouselid}}" data-slide-to="{{index}}"{{#active}} class="active"{{/active}}>
                     <button type="button" data-target="#{{carouselid}}" data-slide-to="{{index}}">
                         <span class="sr-only">{{title}}</span>
                     </button>
