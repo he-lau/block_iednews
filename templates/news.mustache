@@ -1,0 +1,52 @@
+{{!
+    @template block_iednews/news
+}}
+<div id="{{carouselid}}" class="carousel slide block-iednews" data-ride="carousel" data-interval="{{interval}}">
+    <div class="block-iednews-count text-muted small text-center mb-2">{{newscount}}</div>
+    {{#showcontrols}}
+        <ol class="carousel-indicators block-iednews-indicators">
+            {{#items}}
+                <li{{#active}} class="active"{{/active}}>
+                    <button type="button" data-target="#{{carouselid}}" data-slide-to="{{index}}">
+                        <span class="sr-only">{{title}}</span>
+                    </button>
+                </li>
+            {{/items}}
+        </ol>
+        <div class="text-center mb-2">
+            <button type="button" class="block-iednews-pause"
+                    aria-pressed="false" aria-label="{{pause}}" title="{{pause}}"
+                    data-pause-label="{{pause}}" data-resume-label="{{resume}}">
+                <span class="block-iednews-pause-icon" aria-hidden="true">
+                    <span></span><span></span>
+                </span>
+                <span class="block-iednews-resume-icon d-none" aria-hidden="true"></span>
+                <span class="sr-only block-iednews-pause-label">{{pause}}</span>
+            </button>
+        </div>
+    {{/showcontrols}}
+    <div class="carousel-inner">
+        {{#items}}
+            <article class="carousel-item{{#active}} active{{/active}}">
+                <h5 class="mb-1">{{title}}</h5>
+                {{#showdate}}<div class="text-muted small mb-1">{{date}}</div>{{/showdate}}
+                <div class="block-iednews-content">{{{content}}}</div>
+            </article>
+        {{/items}}
+    </div>
+    {{#showcontrols}}
+        <a class="carousel-control-prev" href="#{{carouselid}}" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">{{previous}}</span>
+        </a>
+        <a class="carousel-control-next" href="#{{carouselid}}" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">{{next}}</span>
+        </a>
+    {{/showcontrols}}
+</div>
+{{#js}}
+require(['block_iednews/carousel'], function(carousel) {
+    carousel.init('{{carouselid}}');
+});
+{{/js}}

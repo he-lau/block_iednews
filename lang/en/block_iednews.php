@@ -1,0 +1,41 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+
+$string['pluginname'] = 'IED news';
+$string['iednews:addinstance'] = 'Add a new IED news block';
+$string['iednews:myaddinstance'] = 'Add a new IED news block to Dashboard';
+$string['iednews:manage'] = 'Manage IED news';
+$string['addnews'] = 'Add news';
+$string['confirmdelete'] = 'Are you sure you want to delete the news "{$a}"?';
+$string['customtitle'] = 'Custom block title';
+$string['deletenews'] = 'Delete news';
+$string['draft'] = 'Draft';
+$string['editnews'] = 'Edit news';
+$string['immediately'] = 'Immediately';
+$string['invaliddates'] = 'The end date must be later than the start date.';
+$string['managenews'] = 'Manage news';
+$string['maxitems'] = 'Maximum number of news items';
+$string['maxitems_desc'] = 'Default maximum number of news items displayed in each block.';
+$string['newscontent'] = 'Content';
+$string['newscount'] = '{$a} news items';
+$string['newscountsingle'] = '1 news item';
+$string['newsdeleted'] = 'News deleted.';
+$string['newstitle'] = 'Title';
+$string['nonews'] = 'No news is currently available.';
+$string['openmanagement'] = 'Open the news management page';
+$string['privacy:metadata:block_iednews'] = 'Information about news created by administrators.';
+$string['privacy:metadata:block_iednews:content'] = 'The content of the news item.';
+$string['privacy:metadata:block_iednews:timecreated'] = 'The time when the news item was created.';
+$string['privacy:metadata:block_iednews:timemodified'] = 'The time when the news item was last modified.';
+$string['privacy:metadata:block_iednews:title'] = 'The title of the news item.';
+$string['privacy:metadata:block_iednews:usermodified'] = 'The administrator who last modified the news item.';
+$string['published'] = 'Published';
+$string['publishfrom'] = 'Publish from';
+$string['publishto'] = 'Publish until';
+$string['pause'] = 'Pause slideshow';
+$string['resume'] = 'Resume slideshow';
+$string['seconds'] = '{$a} seconds';
+$string['showdate'] = 'Show publication date';
+$string['showdate_desc'] = 'Display the publication date by default.';
+$string['slidespeed'] = 'Slide duration';
+$string['slidespeed_desc'] = 'Time each news item remains visible before advancing.';

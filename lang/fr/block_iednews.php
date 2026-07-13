@@ -1,0 +1,41 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+
+$string['pluginname'] = 'Actualités IED';
+$string['iednews:addinstance'] = 'Ajouter un bloc Actualités IED';
+$string['iednews:myaddinstance'] = 'Ajouter un bloc Actualités IED au tableau de bord';
+$string['iednews:manage'] = 'Gérer les actualités IED';
+$string['addnews'] = 'Ajouter une actualité';
+$string['confirmdelete'] = 'Voulez-vous vraiment supprimer l’actualité « {$a} » ?';
+$string['customtitle'] = 'Titre personnalisé du bloc';
+$string['deletenews'] = 'Supprimer l’actualité';
+$string['draft'] = 'Brouillon';
+$string['editnews'] = 'Modifier l’actualité';
+$string['immediately'] = 'Immédiatement';
+$string['invaliddates'] = 'La date de fin doit être postérieure à la date de début.';
+$string['managenews'] = 'Gérer les actualités';
+$string['maxitems'] = 'Nombre maximal d’actualités';
+$string['maxitems_desc'] = 'Nombre maximal d’actualités affichées par défaut dans chaque bloc.';
+$string['newscontent'] = 'Contenu';
+$string['newscount'] = '{$a} actualités';
+$string['newscountsingle'] = '1 actualité';
+$string['newsdeleted'] = 'Actualité supprimée.';
+$string['newstitle'] = 'Titre';
+$string['nonews'] = 'Aucune actualité n’est disponible actuellement.';
+$string['openmanagement'] = 'Ouvrir la page de gestion des actualités';
+$string['privacy:metadata:block_iednews'] = 'Informations concernant les actualités créées par les administrateurs.';
+$string['privacy:metadata:block_iednews:content'] = 'Le contenu de l’actualité.';
+$string['privacy:metadata:block_iednews:timecreated'] = 'La date de création de l’actualité.';
+$string['privacy:metadata:block_iednews:timemodified'] = 'La date de dernière modification de l’actualité.';
+$string['privacy:metadata:block_iednews:title'] = 'Le titre de l’actualité.';
+$string['privacy:metadata:block_iednews:usermodified'] = 'L’administrateur ayant modifié l’actualité en dernier.';
+$string['published'] = 'Publiée';
+$string['publishfrom'] = 'Publier à partir du';
+$string['publishto'] = 'Publier jusqu’au';
+$string['pause'] = 'Mettre le défilement en pause';
+$string['resume'] = 'Reprendre le défilement';
+$string['seconds'] = '{$a} secondes';
+$string['showdate'] = 'Afficher la date de publication';
+$string['showdate_desc'] = 'Afficher la date de publication par défaut.';
+$string['slidespeed'] = 'Durée d’affichage';
+$string['slidespeed_desc'] = 'Durée pendant laquelle chaque actualité reste visible avant le défilement.';
