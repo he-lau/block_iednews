@@ -74,6 +74,8 @@ class block_iednews extends block_base {
         } else {
             $items = [];
             $index = 0;
+            $targetcohorts = $this->get_target_cohorts(array_keys($newsitems));
+            $usercohorts = $this->get_user_cohorts($USER->id);
             foreach ($newsitems as $news) {
                 $item = new stdClass();
                 $item->title = format_string($news->title);
@@ -90,6 +92,10 @@ class block_iednews extends block_base {
                 $item->date = userdate($news->publishfrom ?: $news->timecreated, get_string('strftimedatefullshort'));
                 $item->active = ($index === 0);
                 $item->index = $index;
+                $item->visibilityreason = $this->get_visibility_reason(
+                    $targetcohorts[$news->id] ?? [],
+                    $usercohorts
+                );
                 $items[] = $item;
                 $index++;
             }
@@ -136,5 +142,66 @@ class block_iednews extends block_base {
 
     public function applicable_formats(): array {
         return ['all' => true];
+    }
+
+    private function get_target_cohorts(array $newsids): array {
+        global $DB;
+
+        if (!$newsids) {
+            return [];
+        }
+
+        list($newssql, $params) = $DB->get_in_or_equal($newsids, SQL_PARAMS_NAMED, 'newsid');
+        $sql = "SELECT bnc.id, bnc.newsid, bnc.cohortid, c.name
+                  FROM {block_iednews_cohort} bnc
+                  JOIN {cohort} c ON c.id = bnc.cohortid
+                 WHERE bnc.newsid $newssql
+              ORDER BY c.name ASC";
+        $records = $DB->get_records_sql($sql, $params);
+        $cohorts = [];
+
+        foreach ($records as $record) {
+            $cohorts[$record->newsid][$record->cohortid] = format_string($record->name);
+        }
+
+        return $cohorts;
+    }
+
+    private function get_user_cohorts(int $userid): array {
+        global $DB;
+
+        if (is_siteadmin()) {
+            return [];
+        }
+
+        return $DB->get_records_menu(
+            'cohort_members',
+            ['userid' => $userid],
+            '',
+            'cohortid, cohortid AS cohortidvalue'
+        );
+    }
+
+    private function get_visibility_reason(array $targetcohorts, array $usercohorts): string {
+        if (is_siteadmin()) {
+            return get_string('visibilityreason_admin', 'block_iednews');
+        }
+
+        if (!$targetcohorts) {
+            return get_string('visibilityreason_all', 'block_iednews');
+        }
+
+        $matchedcohorts = [];
+        foreach ($targetcohorts as $cohortid => $cohortname) {
+            if (isset($usercohorts[$cohortid])) {
+                $matchedcohorts[] = $cohortname;
+            }
+        }
+
+        if ($matchedcohorts) {
+            return get_string('visibilityreason_cohorts', 'block_iednews', implode(', ', $matchedcohorts));
+        }
+
+        return get_string('visibilityreason_admin', 'block_iednews');
     }
 }

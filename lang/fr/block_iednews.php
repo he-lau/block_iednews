@@ -51,3 +51,6 @@ $string['notargetusers'] = 'Aucun utilisateur concerne.';
 $string['privacy:metadata:block_iednews_cohort'] = 'Cohortes ciblees par les actualites.';
 $string['privacy:metadata:block_iednews_cohort:newsid'] = 'Identifiant de l actualite.';
 $string['privacy:metadata:block_iednews_cohort:cohortid'] = 'Identifiant de la cohorte ciblee.';
+$string['visibilityreason_admin'] = 'Vous voyez cette actualite car vous etes administrateur.';
+$string['visibilityreason_all'] = 'Vous voyez cette actualite car elle est visible par tous.';
+$string['visibilityreason_cohorts'] = 'Vous voyez cette actualite car vous etes inscrit dans la cohorte : {$a}.';

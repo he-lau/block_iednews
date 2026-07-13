@@ -51,3 +51,6 @@ $string['notargetusers'] = 'No target users.';
 $string['privacy:metadata:block_iednews_cohort'] = 'Cohorts targeted by news items.';
 $string['privacy:metadata:block_iednews_cohort:newsid'] = 'News item identifier.';
 $string['privacy:metadata:block_iednews_cohort:cohortid'] = 'Target cohort identifier.';
+$string['visibilityreason_admin'] = 'You can see this news item because you are an administrator.';
+$string['visibilityreason_all'] = 'You can see this news item because it is visible to everyone.';
+$string['visibilityreason_cohorts'] = 'You can see this news item because you are enrolled in the cohort: {$a}.';
