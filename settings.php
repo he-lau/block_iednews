@@ -29,6 +29,20 @@ if ($ADMIN->fulltree) {
             10000 => get_string('seconds', 'block_iednews', 10),
         ]
     ));
+    $settings->add(new admin_setting_configtext(
+        'block_iednews/maxheight',
+        get_string('maxheight', 'block_iednews'),
+        get_string('maxheight_desc', 'block_iednews'),
+        420,
+        PARAM_INT
+    ));
+    $settings->add(new admin_setting_configtext(
+        'block_iednews/summarychars',
+        get_string('summarychars', 'block_iednews'),
+        get_string('summarychars_desc', 'block_iednews'),
+        220,
+        PARAM_INT
+    ));
     $settings->add(new admin_setting_description(
         'block_iednews/managelink',
         get_string('managenews', 'block_iednews'),

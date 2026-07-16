@@ -28,5 +28,16 @@ function xmldb_block_iednews_upgrade($oldversion): bool {
         upgrade_block_savepoint(true, 2026070906, 'iednews');
     }
 
+    if ($oldversion < 2026070908) {
+        $table = new xmldb_table('block_iednews');
+        $field = new xmldb_field('image', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'title');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2026070908, 'iednews');
+    }
+
     return true;
 }

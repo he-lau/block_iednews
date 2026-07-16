@@ -24,5 +24,29 @@ class block_iednews_edit_form extends block_edit_form {
             10000 => get_string('seconds', 'block_iednews', 10),
         ]);
         $mform->setDefault('config_slidespeed', (int) get_config('block_iednews', 'slidespeed') ?: 5000);
+
+        $mform->addElement('text', 'config_maxheight', get_string('maxheight', 'block_iednews'));
+        $mform->setType('config_maxheight', PARAM_INT);
+        $mform->setDefault('config_maxheight', (int) get_config('block_iednews', 'maxheight') ?: 420);
+
+        $mform->addElement('text', 'config_summarychars', get_string('summarychars', 'block_iednews'));
+        $mform->setType('config_summarychars', PARAM_INT);
+        $mform->setDefault('config_summarychars', (int) get_config('block_iednews', 'summarychars') ?: 220);
+    }
+
+    public function validation($data, $files): array {
+        $errors = parent::validation($data, $files);
+
+        if (isset($data['config_maxheight'])
+                && ((int) $data['config_maxheight'] < 220 || (int) $data['config_maxheight'] > 900)) {
+            $errors['config_maxheight'] = get_string('maxheight_invalid', 'block_iednews');
+        }
+
+        if (isset($data['config_summarychars'])
+                && ((int) $data['config_summarychars'] < 60 || (int) $data['config_summarychars'] > 1000)) {
+            $errors['config_summarychars'] = get_string('summarychars_invalid', 'block_iednews');
+        }
+
+        return $errors;
     }
 }

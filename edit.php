@@ -24,12 +24,29 @@ $editoroptions = [
     'maxfiles' => -1,
     'maxbytes' => get_max_upload_file_size(),
     'subdirs' => 0,
-    'accepted_types' => ['image'],
+    'accepted_types' => ['.png', '.jpg', '.jpeg'],
+];
+$imageoptions = [
+    'context' => $context,
+    'maxfiles' => 1,
+    'maxbytes' => get_max_upload_file_size(),
+    'subdirs' => 0,
+    'accepted_types' => ['.png', '.jpg', '.jpeg'],
 ];
 $cohorts = $DB->get_records_menu('cohort', null, 'name ASC', 'id, name');
 
 if ($id) {
     $news = $DB->get_record('block_iednews', ['id' => $id], '*', MUST_EXIST);
+    $draftitemid = file_get_submitted_draft_itemid('image_filemanager');
+    file_prepare_draft_area(
+        $draftitemid,
+        $context->id,
+        'block_iednews',
+        'image',
+        $news->id,
+        $imageoptions
+    );
+    $news->image_filemanager = $draftitemid;
     $news = file_prepare_standard_editor(
         $news,
         'content',
@@ -52,11 +69,16 @@ if ($id) {
         'publishfrom' => time(),
         'publishto' => 0,
         'cohortids' => [],
+        'image_filemanager' => file_get_unused_draft_itemid(),
         'content_editor' => ['text' => '', 'format' => FORMAT_HTML],
     ];
 }
 
-$form = new news_form($url, ['editoroptions' => $editoroptions, 'cohorts' => $cohorts]);
+$form = new news_form($url, [
+    'editoroptions' => $editoroptions,
+    'imageoptions' => $imageoptions,
+    'cohorts' => $cohorts,
+]);
 $form->set_data($news);
 
 if ($form->is_cancelled()) {
@@ -75,6 +97,7 @@ if ($form->is_cancelled()) {
         $DB->update_record('block_iednews', $record);
     } else {
         $record->timecreated = $record->timemodified;
+        $record->image = 0;
         $record->content = '';
         $record->contentformat = FORMAT_HTML;
         $record->id = $DB->insert_record('block_iednews', $record);
@@ -91,9 +114,18 @@ if ($form->is_cancelled()) {
     );
     $DB->update_record('block_iednews', (object) [
         'id' => $itemid,
+        'image' => $itemid,
         'content' => $data->content,
         'contentformat' => $data->contentformat,
     ]);
+    file_save_draft_area_files(
+        $data->image_filemanager,
+        $context->id,
+        'block_iednews',
+        'image',
+        $itemid,
+        $imageoptions
+    );
 
     $DB->delete_records('block_iednews_cohort', ['newsid' => $itemid]);
     if (!empty($data->cohortids) && is_array($data->cohortids)) {

@@ -18,6 +18,7 @@ class provider implements
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table('block_iednews', [
             'title' => 'privacy:metadata:block_iednews:title',
+            'image' => 'privacy:metadata:block_iednews:image',
             'content' => 'privacy:metadata:block_iednews:content',
             'usermodified' => 'privacy:metadata:block_iednews:usermodified',
             'timecreated' => 'privacy:metadata:block_iednews:timecreated',
@@ -27,6 +28,7 @@ class provider implements
             'newsid' => 'privacy:metadata:block_iednews_cohort:newsid',
             'cohortid' => 'privacy:metadata:block_iednews_cohort:cohortid',
         ], 'privacy:metadata:block_iednews_cohort');
+        $collection->link_subsystem('core_files', 'privacy:metadata:core_files');
         return $collection;
     }
 
@@ -73,6 +75,12 @@ class provider implements
                 'content',
                 $record->id
             );
+            writer::with_context($context)->export_area_files(
+                [],
+                'block_iednews',
+                'image',
+                $record->id
+            );
         }
 
         writer::with_context($context)->export_data([], (object) ['news' => $newsitems]);
@@ -86,6 +94,7 @@ class provider implements
         }
 
         get_file_storage()->delete_area_files($context->id, 'block_iednews', 'content');
+        get_file_storage()->delete_area_files($context->id, 'block_iednews', 'image');
         $DB->delete_records('block_iednews_cohort');
         $DB->delete_records('block_iednews');
     }
@@ -101,6 +110,7 @@ class provider implements
         $records = $DB->get_records('block_iednews', ['usermodified' => $contextlist->get_user()->id], '', 'id');
         foreach ($records as $record) {
             get_file_storage()->delete_area_files($context->id, 'block_iednews', 'content', $record->id);
+            get_file_storage()->delete_area_files($context->id, 'block_iednews', 'image', $record->id);
             $DB->delete_records('block_iednews_cohort', ['newsid' => $record->id]);
         }
         $DB->delete_records('block_iednews', ['usermodified' => $contextlist->get_user()->id]);

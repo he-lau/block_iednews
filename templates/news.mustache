@@ -1,7 +1,7 @@
 {{!
     @template block_iednews/news
 }}
-<div id="{{carouselid}}" class="carousel slide block-iednews" data-ride="carousel" data-interval="{{interval}}">
+<div id="{{carouselid}}" class="carousel slide block-iednews" data-ride="carousel" data-interval="{{interval}}" style="--block-iednews-max-height: {{maxheight}}px;">
     {{#showcontrols}}
         <div class="d-flex justify-content-between align-items-center mb-2 block-iednews-sliderbar">
             <div class="block-iednews-count">{{newscount}}</div>
@@ -30,10 +30,24 @@
     <div class="carousel-inner">
         {{#items}}
             <article class="carousel-item{{#active}} active{{/active}}">
-                <h5 class="mb-1">{{title}}</h5>
-                {{#showdate}}<div class="text-muted small mb-1">{{date}}</div>{{/showdate}}
-                <div class="block-iednews-visibility-reason text-muted small mb-2">{{visibilityreason}}</div>
-                <div class="block-iednews-content">{{{content}}}</div>
+                <div class="block-iednews-slide">
+                    <span class="block-iednews-image-wrap{{^hasimage}} block-iednews-image-empty{{/hasimage}}">
+                        {{#hasimage}}
+                            <img class="block-iednews-image" src="{{imageurl}}" alt="{{imagealt}}">
+                        {{/hasimage}}
+                        {{^hasimage}}
+                            <span class="block-iednews-placeholder" aria-hidden="true">
+                                <span class="block-iednews-placeholder-icon"></span>
+                            </span>
+                        {{/hasimage}}
+                    </span>
+                    <span class="block-iednews-slide-body">
+                        <span class="block-iednews-title">{{title}}</span>
+                        {{#showdate}}<span class="block-iednews-date text-muted small">{{date}}</span>{{/showdate}}
+                        <span class="block-iednews-summary">{{summary}}</span>
+                        <a class="btn btn-primary btn-sm block-iednews-readmore" href="{{url}}" target="_blank" rel="noopener noreferrer">{{readmore}}</a>
+                    </span>
+                </div>
             </article>
         {{/items}}
     </div>

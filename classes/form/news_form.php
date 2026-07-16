@@ -20,6 +20,10 @@ class news_form extends \moodleform {
         $mform->addRule('title', null, 'required', null, 'client');
         $mform->addRule('title', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
+        $mform->addElement('filemanager', 'image_filemanager', get_string('newsimage', 'block_iednews'), null,
+            $this->_customdata['imageoptions']);
+        $mform->addHelpButton('image_filemanager', 'newsimage', 'block_iednews');
+
         $mform->addElement('editor', 'content_editor', get_string('newscontent', 'block_iednews'), null,
             $editoroptions);
         $mform->setType('content_editor', PARAM_RAW);
@@ -36,7 +40,7 @@ class news_form extends \moodleform {
         $cohorts = $this->_customdata['cohorts'] ?? [];
         $mform->addElement('select', 'cohortids', get_string('targetcohorts', 'block_iednews'), $cohorts,
             ['multiple' => 'multiple', 'size' => min(10, max(3, count($cohorts)))]);
-        $mform->setType('cohortids', PARAM_INT);
+        $mform->setType('cohortids', PARAM_RAW);
         $mform->addHelpButton('cohortids', 'targetcohorts', 'block_iednews');
 
         $this->add_action_buttons(true);

@@ -21,6 +21,7 @@ $PAGE->set_heading(get_string('managenews', 'block_iednews'));
 
 if ($confirm) {
     get_file_storage()->delete_area_files($context->id, 'block_iednews', 'content', $id);
+    get_file_storage()->delete_area_files($context->id, 'block_iednews', 'image', $id);
     $DB->delete_records('block_iednews_cohort', ['newsid' => $id]);
     $DB->delete_records('block_iednews', ['id' => $id]);
     redirect(new moodle_url('/blocks/iednews/manage.php'), get_string('newsdeleted', 'block_iednews'));

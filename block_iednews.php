@@ -3,6 +3,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/blocks/iednews/lib.php');
+
 class block_iednews extends block_base {
     public function init(): void {
         $this->title = get_string('pluginname', 'block_iednews');
@@ -36,6 +38,14 @@ class block_iednews extends block_base {
             ? (int) $this->config->slidespeed
             : (int) get_config('block_iednews', 'slidespeed');
         $slidespeed = max(2000, min(30000, $slidespeed ?: 5000));
+        $summarychars = !empty($this->config->summarychars)
+            ? (int) $this->config->summarychars
+            : (int) get_config('block_iednews', 'summarychars');
+        $summarychars = max(60, min(1000, $summarychars ?: 220));
+        $maxheight = !empty($this->config->maxheight)
+            ? (int) $this->config->maxheight
+            : (int) get_config('block_iednews', 'maxheight');
+        $maxheight = max(220, min(900, $maxheight ?: 420));
         $now = time();
         $select = 'published = :published AND (publishfrom = 0 OR publishfrom <= :now1)
                    AND (publishto = 0 OR publishto >= :now2)';
@@ -79,15 +89,13 @@ class block_iednews extends block_base {
             foreach ($newsitems as $news) {
                 $item = new stdClass();
                 $item->title = format_string($news->title);
-                $content = file_rewrite_pluginfile_urls(
-                    $news->content,
-                    'pluginfile.php',
-                    context_system::instance()->id,
-                    'block_iednews',
-                    'content',
-                    $news->id
-                );
-                $item->content = format_text($content, $news->contentformat, ['context' => $this->context]);
+                $content = block_iednews_format_news_content($news, $this->context);
+                $image = $this->get_teaser_image($news->id);
+                $item->hasimage = !empty($image);
+                $item->imageurl = $image->src ?? '';
+                $item->imagealt = $image->alt ?? '';
+                $item->summary = $this->get_summary($content, $summarychars);
+                $item->url = (new moodle_url('/blocks/iednews/view.php', ['id' => $news->id]))->out(false);
                 $item->showdate = $showdate;
                 $item->date = userdate($news->publishfrom ?: $news->timecreated, get_string('strftimedatefullshort'));
                 $item->active = ($index === 0);
@@ -102,6 +110,7 @@ class block_iednews extends block_base {
             $this->content->text = $OUTPUT->render_from_template('block_iednews/news', [
                 'carouselid' => 'block-iednews-' . $this->instance->id,
                 'interval' => $slidespeed,
+                'maxheight' => $maxheight,
                 'items' => $items,
                 'totalitems' => count($items),
                 'showcontrols' => count($items) > 1,
@@ -123,6 +132,7 @@ class block_iednews extends block_base {
                 'next' => get_string('next'),
                 'pause' => get_string('pause', 'block_iednews'),
                 'resume' => get_string('resume', 'block_iednews'),
+                'readmore' => get_string('readmore', 'block_iednews'),
             ]);
         }
 
@@ -213,5 +223,44 @@ class block_iednews extends block_base {
         }
 
         return get_string('visibilityreason_admin', 'block_iednews');
+    }
+
+    private function get_teaser_image(int $newsid): ?stdClass {
+        $fs = get_file_storage();
+        $files = $fs->get_area_files(
+            context_system::instance()->id,
+            'block_iednews',
+            'image',
+            $newsid,
+            'itemid, filepath, filename',
+            false
+        );
+
+        if (!$files) {
+            return null;
+        }
+
+        $file = reset($files);
+        $image = new stdClass();
+        $image->src = moodle_url::make_pluginfile_url(
+            context_system::instance()->id,
+            'block_iednews',
+            'image',
+            $newsid,
+            $file->get_filepath(),
+            $file->get_filename()
+        )->out(false);
+        $image->alt = '';
+
+        return $image;
+    }
+
+    private function get_summary(string $html, int $maxchars): string {
+        $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($html), ENT_QUOTES, 'UTF-8')));
+        if (core_text::strlen($text) <= $maxchars) {
+            return s($text);
+        }
+
+        return s(core_text::substr($text, 0, $maxchars - 1) . '…');
     }
 }
