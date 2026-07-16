@@ -104,13 +104,22 @@
 }
 
 .block-iednews .block-iednews-resume-icon:not(.d-none) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+}
+
+.block-iednews .block-iednews-resume-icon:not(.d-none)::before {
+    content: "";
     display: block;
     width: 0;
     height: 0;
-    margin-left: 2px;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     border-left: 8px solid currentColor;
+    transform: translateX(1px);
 }
 
 .block-iednews-content img {
