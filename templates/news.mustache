@@ -31,16 +31,11 @@
         {{#items}}
             <article class="carousel-item{{#active}} active{{/active}}">
                 <div class="block-iednews-slide">
-                    <span class="block-iednews-image-wrap{{^hasimage}} block-iednews-image-empty{{/hasimage}}">
-                        {{#hasimage}}
-                            <img class="block-iednews-image" src="{{imageurl}}" alt="{{imagealt}}">
-                        {{/hasimage}}
-                        {{^hasimage}}
-                            <span class="block-iednews-placeholder" aria-hidden="true">
-                                <span class="block-iednews-placeholder-icon"></span>
-                            </span>
-                        {{/hasimage}}
+                    {{#hasimage}}
+                    <span class="block-iednews-image-wrap">
+                        <img class="block-iednews-image" src="{{imageurl}}" alt="{{imagealt}}">
                     </span>
+                    {{/hasimage}}
                     <span class="block-iednews-slide-body">
                         <span class="block-iednews-title">{{title}}</span>
                         {{#showdate}}<span class="block-iednews-date text-muted small">{{date}}</span>{{/showdate}}
