@@ -54,3 +54,4 @@ $string['privacy:metadata:block_iednews_cohort:cohortid'] = 'Identifiant de la c
 $string['visibilityreason_admin'] = 'Vous voyez cette actualité car vous êtes administrateur.';
 $string['visibilityreason_all'] = 'Vous voyez cette actualité car elle est visible par tous.';
 $string['visibilityreason_cohorts'] = 'Vous voyez cette actualité car vous êtes inscrit dans la cohorte : {$a}.';
+$string['newspagination'] = 'Navigation des actualites';

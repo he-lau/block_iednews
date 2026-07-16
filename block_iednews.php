@@ -103,7 +103,17 @@ class block_iednews extends block_base {
                 'carouselid' => 'block-iednews-' . $this->instance->id,
                 'interval' => $slidespeed,
                 'items' => $items,
+                'totalitems' => count($items),
                 'showcontrols' => count($items) > 1,
+                'pagingbar' => [
+                    'previous' => true,
+                    'next' => true,
+                    'hidecontrolonsinglepage' => false,
+                    'ignorecontrolwhileloading' => true,
+                    'arialabels' => [
+                        'paginationnav' => get_string('newspagination', 'block_iednews'),
+                    ],
+                ],
                 'newscount' => get_string(
                     count($items) === 1 ? 'newscountsingle' : 'newscount',
                     'block_iednews',
